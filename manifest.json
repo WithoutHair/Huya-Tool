@@ -1,0 +1,38 @@
+{
+    "name": "Huya tool",
+    "description": "",
+    "version": "1.0.0",
+    "author": "Mywait",
+    "homepage_url": "https://github.com/WithoutHair/Disable-Content-Security-Policy",
+    "manifest_version": 3,
+    "host_permissions": [
+      "https://www.doseeing.com/*",
+      "https://api.live.bilibili.com/*"
+    ],
+    "action": {
+      "default_icon": {
+        "16": "icon/ice.png"
+      }
+    },
+    "icons": {
+      "48": "icon/ice_48.png",
+      "128": "icon/ice_128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.huya.com/*"],
+            "js": ["http.js", "flv.js", "content.js"],
+            "css": ["content.css"]
+        }
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "web_accessible_resources": [
+      {
+        "resources": [ "icon/ice.png", "icon/close.png", "icon/stats.png", "icon/screen.png" ],
+        "matches": [ "http://*/*", "https://*/*" ]
+      }
+    ]
+  }
+  

@@ -1,0 +1,216 @@
+.ht-fixed {
+    cursor: pointer;
+    z-index: 1000;
+    position: fixed;
+    right: 65px;
+    bottom: 65px;
+    width: 32px;
+    height: 32px;
+    background-image: url('chrome-extension://__MSG_@@extension_id__/icon/ice.png');
+}
+
+.ht-con {
+    transition: all .5s;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: -115px;
+    left: -8px;
+    width: 48px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 9%);
+    border-radius: 4px;
+    background-color: rgba(30,128,255,.35);
+    text-align: center;
+}
+
+.ht-con::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 19px;
+    width: 0;
+    height: 0;
+    border-width: 8px 5px 0;
+    border-color: rgba(30,128,255,.35) rgba(0, 0, 0, 0);
+    border-style: solid;
+}
+
+.ht-fixed.active .ht-con {
+    visibility: visible;
+    opacity: 1;
+    top: -135px;
+}
+
+.ht-con .ht-item {
+    cursor: auto;
+    user-select: none;
+    position: relative;
+    padding: 10px 0;
+}
+
+.ht-con .ht-item img {
+    cursor: pointer;
+}
+
+.ht-con .ht-item .ht-stat {
+    transition: all .5s;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 58px;
+    display: flex;
+    box-shadow: 0 6px 12px 7px rgb(106 115 133 / 22%);
+    border: 1px solid #E3E5E7;
+    border-radius: 4px;
+    background-color: #fff;
+    white-space: nowrap;
+}
+
+.ht-con .ht-item .ht-stat::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: -7px;
+    width: 0;
+    height: 0;
+    border-width: 3px 0 3px 7px;
+    border-color: rgba(0, 0, 0, 0) #fff;
+    border-style: solid;
+}
+
+.ht-con .ht-item:nth-child(1):hover .ht-stat {
+    visibility: visible;
+    opacity: 1;
+    right: 68px;
+}
+
+.ht-con .ht-item .ht-stat .ht-stat-item {
+    padding: 10px;
+}
+
+.ht-stat-item .ht-stat-title {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.ht-stat-item .ht-stat-num {
+    margin-bottom: 5px;
+    color: #d58400;
+}
+
+/*popup here*/
+.ht-input-con {
+    z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    box-shadow: 0 6px 12px 7px rgb(106 115 133 / 22%);
+    border-radius: 4px;
+    padding-top: 10px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.ht-input-con .ht-input-title {
+    font-size: 24px;
+}
+
+.ht-input-con input {
+    width: 200px;
+    margin: 10px 0;
+    border: 1px solid #ff9900;
+    border-radius: 17px;
+    padding: 6px 12px;
+}
+
+.ht-input-con .ht-button-line {
+    border-top: 1px solid #e6e6e6;
+}
+
+.ht-input-con .ht-button-line div {
+    transition: background-color .5s;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    line-height: 36px;
+}
+
+.ht-input-con .ht-button-line div:hover {
+    background-color: #e6e6e6;
+}
+
+.ht-input-con .ht-button-line div::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 36px;
+    background-color: #e6e6e6;
+}
+
+.ht-video-con {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* transform: translate(-50%, -50%); */
+    width: 400px;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.ht-video-title {
+    cursor: move;
+    background-color: #fff;
+}
+
+.ht-video-title img {
+    cursor: pointer;
+    float: right;
+    margin: 5px;
+}
+
+.ht-video-con video {
+    width: 100%;
+    height: calc(100% - 26px);
+}
+
+.ht-video-resize {
+    cursor: se-resize;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 5px;
+    height: 5px;
+    background-color: #000;
+}
+
+/*global*/
+.display {
+    display: block;
+}
+
+.ht-button {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: #ffa900;
+    color: #fff;
+}
+
+/*reset*/
+input {
+    outline: none;
+    padding: 0;
+}
+
+select {
+    outline: none;
+}
