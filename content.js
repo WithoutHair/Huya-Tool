@@ -1,5 +1,3 @@
-let streams = {}
-
 let isHostRoom = () => {
   try {
     let room_id = document.getElementsByClassName('host-rid')[0].children[1].textContent
@@ -68,15 +66,11 @@ let InitInput = () => {
   document.getElementsByClassName('ht-button-ok')[0].onclick = async () => {
     hide()
     let urlId = inputUrlCon.children[1].value.split('/').pop()
+    let key = `b-${urlId}`
     let {data} = await getRoomId(urlId)
     let stream = await getStreaming(data.room_id)
-    let key = `b-${urlId}`
 
-    streams[key] = {
-      quality: stream.data.quality_description
-    }
-
-    createVideo(stream.data.durl[0].url, key)
+    createVideo(stream.data, key)
   }
 
   document.getElementsByClassName('ht-button-cancel')[0].onclick = () => {
@@ -130,23 +124,25 @@ let getStreaming = (room_id, qn = 150) => {
   })
 }
 
-let createVideo = (url, key) => {
+let createVideo = (data, key) => {
   if (flvjs.isSupported()) {
       let video = document.createElement('video'),
         con = document.createElement('div'),
         title = document.createElement('div'),
-        select = document.createElement('select'),
+        quality = document.createElement('select'),
+        path = document.createElement('select'),
         close = document.createElement('img'),
         resizeDot = document.createElement('div'),
         insertButton = document.createElement('div'),
         restoreButton = document.createElement('div'),
         flvPlayer = flvjs.createPlayer({
           type: 'flv',
-          url
+          url: data.durl[0].url
         })
         flvPlayer.attachMediaElement(video)
         flvPlayer.load()
 
+      let now = document.getElementById('hy-video') || document.getElementById('player-recommend')
       video.controls = true
       con.className = `ht-video-con ${key}`
       con.draggable = true
@@ -155,26 +151,35 @@ let createVideo = (url, key) => {
       insertButton.className = 'ht-button'
       insertButton.innerHTML = '嵌入直播间'
       insertButton.onclick = () => {
-        let now = document.getElementById('hy-video') || document.getElementById('player-recommend')
         video.style.width = '100%'
         now.style.display = 'none'
         document.getElementById('player-video').appendChild(video)
+        insertButton.style.display = 'none'
+        restoreButton.style.display = 'inline-block'
       }
       restoreButton.className = 'ht-button'
       restoreButton.innerHTML = '恢复直播间'
+      restoreButton.style.display = 'none'
       restoreButton.onclick = () => {
-        let now = document.getElementById('hy-video') || document.getElementById('player-recommend')
         now.style.display = 'inline-block'
         con.appendChild(video)
+        insertButton.style.display = 'inline-block'
+        restoreButton.style.display = 'none'
       }
       close.src = chrome.runtime.getURL('icon/close.png')
       close.onclick = function () {
+        now.style.display = 'inline-block'
+        con.appendChild(video)
         flvPlayer.destroy()
         this.parentNode.parentNode.remove()
       }
-      select.className = 'ht-video-quality'
-      select.onchange = e => {
+      quality.onchange = e => {
         getStreaming(key.split('-').pop(), e.target.value).then(res => {
+          path.innerHTML = ''
+          res.data.durl.forEach((p, index) => {
+            path.innerHTML += `<option label=线路${index + 1} value=${p.url}>`
+          })
+          path.value = res.data.durl[0].url
           flvPlayer.destroy()
           flvPlayer = flvjs.createPlayer({
             type: 'flv',
@@ -185,17 +190,33 @@ let createVideo = (url, key) => {
           flvPlayer.play()
         })
       }
+      path.onchange = e => {
+        flvPlayer.destroy()
+        flvPlayer = flvjs.createPlayer({
+          type: 'flv',
+          url: e.target.value
+        })
+        flvPlayer.attachMediaElement(video)
+        flvPlayer.load()
+        flvPlayer.play()
+      }
       resizeDot.className = 'ht-video-resize'
       resizeDot.draggable = true
 
-      let qualitys = streams[key]['quality']
+      let qualitys = data.quality_description,
+        paths = data.durl
       
       qualitys.forEach(q => {
-        select.innerHTML += `<option label=${q.desc} value=${q.qn}>`
+        quality.innerHTML += `<option label=${q.desc} value=${q.qn}>`
       })
-      select.value = 150
+      quality.value = 150
 
-      title.appendChild(select)
+      paths.forEach((p, index) => {
+        path.innerHTML += `<option label=线路${index + 1} value=${p.url}>`
+      })
+
+      title.appendChild(quality)
+      title.appendChild(path)
       title.appendChild(insertButton)
       title.appendChild(restoreButton)
       title.appendChild(close)
